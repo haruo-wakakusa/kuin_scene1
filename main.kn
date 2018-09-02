@@ -1,0 +1,332 @@
+; Copyright 2018 Haruo Wakakusa
+;
+
+;
+;   Sceneクラス
+;
+
+class Scene()
+	+func load()
+	end func
+	+func unload()
+	end func
+	+func run()
+	end func
+end class
+
+;
+;   Scene1クラス
+;
+
+class Scene1(@Scene)
+	+var tex: []draw@Tex
+	+var isClicked: bool
+	+var snd: snd@Snd
+	
+	+*func load()
+		var FILENAME: [][]char :: [
+		|"buddha_nehanbotoke_daibutsu.png",
+		|"daibutsu_nara_.png",
+		|"hotoke_fudou_myouou.png",
+		|"hotoke_karuraten.png",
+		|"hotoke_ryuutouki.png",
+		|"hotoke_senju_kannon.png",
+		|"hotoke_tentouki.png",
+		|"job_art_hotoke_busshi.png",
+		|"omen_hannya.png",
+		|"sokushinbutsu.png"]
+		
+		do me.tex :: #[10]draw@Tex
+		for i(0, ^FILENAME - 1)
+			do me.tex[i] :: draw@makeTex(
+			|"res/irasutoya/scene1/" ~ FILENAME[i])
+		end for
+		
+		do me.snd :: snd@makeSnd("res/amacha/ryuukihei.ogg", false)
+	end func
+	
+	+*func unload()
+		do me.tex :: null
+		do me.snd :: null
+	end func
+	
+	+*func run()
+		do me.isClicked :: false
+		
+		func onClick(wnd: wnd@WndBase, x: int, y: int)
+			do @scene1.isClicked :: true
+		end func
+		
+		do @draw.onMouseDownL :: onClick
+		
+		if(!@isAlive)
+			ret
+		end if
+		
+		do draw@render(0)
+		do me.load()
+		
+		do me.snd.playLoop(0.0)
+		
+		while(@act() & !me.isClicked)
+			do me.tex[0].drawScale(
+			|10.0, 10.0, 100.0, 100.0 * (588.0 / 800.0),
+			|0.0, 0.0, 800.0, 588.0, 0xFFFFFFFF)
+			do me.tex[1].drawScale(
+			|120.0, 10.0, 100.0, 100.0,
+			|0.0, 0.0, 800.0, 800.0, 0xFFFFFFFF)
+			do me.tex[2].drawScale(
+			|230.0, 10.0, 100.0 * (708.0 / 800.0), 100.0,
+			|0.0, 0.0, 708.0, 800.0, 0xFFFFFFFF)
+			do me.tex[3].drawScale(
+			|340.0, 10.0, 100.0 * (622.0 / 800.0), 100.0,
+			|0.0, 0.0, 622.0, 800.0, 0xFFFFFFFF)
+			do me.tex[4].drawScale(
+			|450.0, 10.0, 100.0 * (531.0 / 800.0), 100.0,
+			|0.0, 0.0, 531.0, 800.0, 0xFFFFFFFF)
+			do me.tex[5].drawScale(
+			|10.0, 120.0, 100.0 * (710.0 / 800.0), 100.0,
+			|0.0, 0.0, 710.0, 800.0, 0xFFFFFFFF)
+			do me.tex[6].drawScale(
+			|120.0, 120.0, 100.0 * (665.0 / 800.0), 100.0,
+			|0.0, 0.0, 665.0, 800.0, 0xFFFFFFFF)
+			do me.tex[7].drawScale(
+			|230.0, 120.0, 100.0, 100.0 * (794.0 / 800.0),
+			|0.0, 0.0, 800.0, 794.0, 0xFFFFFFFF)
+			do me.tex[8].drawScale(
+			|340.0, 120.0, 100.0 * (699.0 / 800.0), 100.0,
+			|0.0, 0.0, 699.0, 800.0, 0xFFFFFFFF)
+			do me.tex[9].drawScale(
+			|450.0, 120.0, 100.0 * (710.0 / 800.0), 100.0,
+			|0.0, 0.0, 710.0, 800.0, 0xFFFFFFFF)
+			
+			do draw@render(60)
+		end while
+		
+		do me.snd.stop()
+		
+		do me.unload()
+	end func
+end class
+
+;
+;   Scene2クラス
+;
+
+class Scene2(@Scene)
+	+var tex: []draw@Tex
+	+var snd: snd@Snd
+	+var isClicked: bool
+	
+	+*func load()
+		var FILENAME: [][]char :: [
+		|"building_kyuuryuujousai.png",
+		|"fune_hansen_kaiyoumaru.png",
+		|"landmark_hakodate_bugyousyo.png",
+		|"landmark_hallgrimskirkja_church.png",
+		|"landmark_houryuji.png",
+		|"landmark_nemrut.png",
+		|"landmark_nirayama_hansyaro.png",
+		|"landmark_notre_dame.png",
+		|"landmark_washington_monument.png",
+		|"syounyudou.png"]
+		
+		do me.tex :: #[10]draw@Tex
+		for i(0, ^FILENAME - 1)
+			do me.tex[i] :: draw@makeTex(
+			|"res/irasutoya/scene2/" ~ FILENAME[i])
+		end for
+		
+		do me.snd :: snd@makeSnd("res/amacha/sevillanotoride.ogg", false)
+	end func
+	
+	+*func unload()
+		do me.tex :: null
+		do me.snd :: null
+	end func
+	
+	+*func run()
+		do me.isClicked :: false
+		
+		func onClick(wnd: wnd@WndBase, x: int, y: int)
+			do @scene2.isClicked :: true
+		end func
+		
+		do @draw.onMouseDownL :: onClick
+		
+		if(!@isAlive)
+			ret
+		end if
+		
+		do draw@render(0)
+		do me.load()
+		
+		do me.snd.playLoop(0.0)
+		
+		while(@act() & !me.isClicked)
+			do me.tex[0].drawScale(
+			|10.0, 10.0, 100.0, 100.0 * (567.0 / 800.0),
+			|0.0, 0.0, 800.0, 567.0, 0xFFFFFFFF)
+			do me.tex[1].drawScale(
+			|120.0, 10.0, 100.0, 100.0 * (672.0 / 800.0),
+			|0.0, 0.0, 800.0, 672.0, 0xFFFFFFFF)
+			do me.tex[2].drawScale(
+			|230.0, 10.0, 100.0, 100.0 * (597.0 / 800.0),
+			|0.0, 0.0, 800.0, 597.0, 0xFFFFFFFF)
+			do me.tex[3].drawScale(
+			|340.0, 10.0, 100.0, 100.0,
+			|0.0, 0.0, 800.0, 800.0, 0xFFFFFFFF)
+			do me.tex[4].drawScale(
+			|450.0, 10.0, 100.0, 100.0 * (729.0 / 800.0),
+			|0.0, 0.0, 800.0, 729.0, 0xFFFFFFFF)
+			do me.tex[5].drawScale(
+			|10.0, 120.0, 100.0, 100.0 * (608.0 / 800.0),
+			|0.0, 0.0, 800.0, 608.0, 0xFFFFFFFF)
+			do me.tex[6].drawScale(
+			|120.0, 120.0, 100.0, 100.0,
+			|0.0, 0.0, 800.0, 800.0, 0xFFFFFFFF)
+			do me.tex[7].drawScale(
+			|230.0, 120.0, 100.0 * (660.0 / 800.0), 100.0,
+			|0.0, 0.0, 660.0, 800.0, 0xFFFFFFFF)
+			do me.tex[8].drawScale(
+			|340.0, 120.0, 100.0, 100.0 * (772.0 / 800.0),
+			|0.0, 0.0, 800.0, 772.0, 0xFFFFFFFF)
+			do me.tex[9].drawScale(
+			|450.0, 120.0, 100.0, 100.0,
+			|0.0, 0.0, 800.0, 800.0, 0xFFFFFFFF)
+			
+			do draw@render(60)
+		end while
+		
+		do me.snd.stop()
+		
+		do me.unload()
+	end func
+end class
+
+;
+;   Scene3クラス
+;
+
+class Scene3(@Scene)
+	+var tex: []draw@Tex
+	+var snd: snd@Snd
+	+var isClicked: bool
+	
+	+*func load()
+		var FILENAME: [][]char :: [
+		|"camera_baby_mother.png",
+		|"hanami_engawa_couple.png",
+		|"kousaku_family_mother.png",
+		|"kouyou_engawa_couple.png",
+		|"medical_kaigo_tsuuin_kaijo_man.png",
+		|"restaurant_rich_family.png",
+		|"school_jugyousankan_parents.png",
+		|"shigosan_753_kids.png",
+		|"syokuji_couple_smile.png",
+		|"taxi_family.png"]
+		
+		do me.tex :: #[10]draw@Tex
+		for i(0, ^FILENAME - 1)
+			do me.tex[i] :: draw@makeTex(
+			|"res/irasutoya/scene3/" ~ FILENAME[i])
+		end for
+		
+		do me.snd :: snd@makeSnd("res/amacha/hotarumausora.ogg", false)
+	end func
+	
+	+*func unload()
+		do me.tex :: null
+		do me.snd :: null
+	end func
+	
+	+*func run()
+		do me.isClicked :: false
+		
+		func onClick(wnd: wnd@WndBase, x: int, y: int)
+			do @scene3.isClicked :: true
+		end func
+		
+		do @draw.onMouseDownL :: onClick
+		
+		if(!@isAlive)
+			ret
+		end if
+		
+		do draw@render(0)
+		do me.load()
+		
+		do me.snd.playLoop(0.0)
+		
+		while(@act() & !me.isClicked)
+			do me.tex[0].drawScale(
+			|10.0, 10.0, 100.0, 100.0 * (603.0 / 800.0),
+			|0.0, 0.0, 800.0, 603.0, 0xFFFFFFFF)
+			do me.tex[1].drawScale(
+			|120.0, 10.0, 100.0 * (715.0 / 800.0), 100.0,
+			|0.0, 0.0, 715.0, 800.0, 0xFFFFFFFF)
+			do me.tex[2].drawScale(
+			|230.0, 10.0, 100.0 * (729.0 / 800.0), 100.0,
+			|0.0, 0.0, 729.0, 800.0, 0xFFFFFFFF)
+			do me.tex[3].drawScale(
+			|340.0, 10.0, 100.0 * (729.0 / 800.0), 100.0,
+			|0.0, 0.0, 729.0, 800.0, 0xFFFFFFFF)
+			do me.tex[4].drawScale(
+			|450.0, 10.0, 100.0 * (666.0 / 800.0), 100.0,
+			|0.0, 0.0, 666.0, 800.0, 0xFFFFFFFF)
+			do me.tex[5].drawScale(
+			|10.0, 120.0, 100.0, 100.0 * (663.0 / 800.0),
+			|0.0, 0.0, 800.0, 663.0, 0xFFFFFFFF)
+			do me.tex[6].drawScale(
+			|120.0, 120.0, 100.0, 100.0 * (536.0 / 800.0),
+			|0.0, 0.0, 800.0, 536.0, 0xFFFFFFFF)
+			do me.tex[7].drawScale(
+			|230.0, 120.0, 100.0, 100.0 * (529.0 / 800.0),
+			|0.0, 0.0, 800.0, 529.0, 0xFFFFFFFF)
+			do me.tex[8].drawScale(
+			|340.0, 120.0, 100.0, 100.0 * (462.0 / 800.0),
+			|0.0, 0.0, 800.0, 462.0, 0xFFFFFFFF)
+			do me.tex[9].drawScale(
+			|450.0, 120.0, 100.0, 100.0 * (692.0 / 800.0),
+			|0.0, 0.0, 800.0, 692.0, 0xFFFFFFFF)
+			
+			do draw@render(60)
+		end while
+		
+		do me.snd.stop()
+		
+		do me.unload()
+	end func
+end class
+
+;
+;   メインルーチン
+;
+
+var wnd: wnd@Wnd
+var draw: wnd@Draw
+var isAlive: bool
+var scene1: @Scene1
+var scene2: @Scene2
+var scene3: @Scene3
+
+func act(): bool
+	do @isAlive :: wnd@act()
+	ret @isAlive
+end func
+
+func main()
+	do ogg@init()
+	do @wnd :: wnd@makeWnd(null, %fix, 800, 600, "シーンサンプル")
+	do @draw :: wnd@makeDraw(@wnd, 0, 0, 800, 600, %fix, %fix, false)
+	do @isAlive :: true
+	do @scene1 :: #@Scene1
+	do @scene2 :: #@Scene2
+	do @scene3 :: #@Scene3
+	
+	while(@isAlive)
+		do @scene1.run()
+		do @scene2.run()
+		do @scene3.run()
+	end while
+end func
