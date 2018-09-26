@@ -23,26 +23,42 @@ class Scene1(@Scene)
 	+var isClicked: bool
 	+var snd: snd@Snd
 	
+	class Loader(\runnable@Runnable)
+		+var tex_: []draw@Tex
+		+var snd_: snd@Snd
+		+*func runnableTarget()
+			var FILENAME: [][]char :: [
+			|"buddha_nehanbotoke_daibutsu.png",
+			|"daibutsu_nara_.png",
+			|"hotoke_fudou_myouou.png",
+			|"hotoke_karuraten.png",
+			|"hotoke_ryuutouki.png",
+			|"hotoke_senju_kannon.png",
+			|"hotoke_tentouki.png",
+			|"job_art_hotoke_busshi.png",
+			|"omen_hannya.png",
+			|"sokushinbutsu.png"]
+			
+			do me.tex_ :: #[^FILENAME]draw@Tex
+			for i(0, ^FILENAME - 1)
+				do me.tex_[i] :: draw@makeTex(
+				|"res/irasutoya/scene1/" ~ FILENAME[i])
+			end for
+			
+			do me.snd_ :: snd@makeSnd("res/amacha/ryuukihei.ogg", false)
+		end func
+	end class
+	
 	+*func load()
-		var FILENAME: [][]char :: [
-		|"buddha_nehanbotoke_daibutsu.png",
-		|"daibutsu_nara_.png",
-		|"hotoke_fudou_myouou.png",
-		|"hotoke_karuraten.png",
-		|"hotoke_ryuutouki.png",
-		|"hotoke_senju_kannon.png",
-		|"hotoke_tentouki.png",
-		|"job_art_hotoke_busshi.png",
-		|"omen_hannya.png",
-		|"sokushinbutsu.png"]
+		do \runnable@runAsync(#Loader)
 		
-		do me.tex :: #[10]draw@Tex
-		for i(0, ^FILENAME - 1)
-			do me.tex[i] :: draw@makeTex(
-			|"res/irasutoya/scene1/" ~ FILENAME[i])
-		end for
+		while(@act() & \runnable@running())
+			do draw@rect(0.0, 0.0, 800.0, 600.0, 0xFF0000FF)
+			do draw@render(60)
+		end while
 		
-		do me.snd :: snd@makeSnd("res/amacha/ryuukihei.ogg", false)
+		do me.tex :: (\runnable@getRunnable() $ Loader).tex_
+		do me.snd :: (\runnable@getRunnable() $ Loader).snd_
 	end func
 	
 	+*func unload()
@@ -118,26 +134,42 @@ class Scene2(@Scene)
 	+var snd: snd@Snd
 	+var isClicked: bool
 	
+	class Loader(\runnable@Runnable)
+		+var tex_: []draw@Tex
+		+var snd_: snd@Snd
+		+*func runnableTarget()
+			var FILENAME: [][]char :: [
+			|"building_kyuuryuujousai.png",
+			|"fune_hansen_kaiyoumaru.png",
+			|"landmark_hakodate_bugyousyo.png",
+			|"landmark_hallgrimskirkja_church.png",
+			|"landmark_houryuji.png",
+			|"landmark_nemrut.png",
+			|"landmark_nirayama_hansyaro.png",
+			|"landmark_notre_dame.png",
+			|"landmark_washington_monument.png",
+			|"syounyudou.png"]
+			
+			do me.tex_ :: #[^FILENAME]draw@Tex
+			for i(0, ^FILENAME - 1)
+				do me.tex_[i] :: draw@makeTex(
+				|"res/irasutoya/scene2/" ~ FILENAME[i])
+			end for
+			
+			do me.snd_ :: snd@makeSnd("res/amacha/sevillanotoride.ogg", false)
+		end func
+	end class
+	
 	+*func load()
-		var FILENAME: [][]char :: [
-		|"building_kyuuryuujousai.png",
-		|"fune_hansen_kaiyoumaru.png",
-		|"landmark_hakodate_bugyousyo.png",
-		|"landmark_hallgrimskirkja_church.png",
-		|"landmark_houryuji.png",
-		|"landmark_nemrut.png",
-		|"landmark_nirayama_hansyaro.png",
-		|"landmark_notre_dame.png",
-		|"landmark_washington_monument.png",
-		|"syounyudou.png"]
+		do \runnable@runAsync(#Loader)
 		
-		do me.tex :: #[10]draw@Tex
-		for i(0, ^FILENAME - 1)
-			do me.tex[i] :: draw@makeTex(
-			|"res/irasutoya/scene2/" ~ FILENAME[i])
-		end for
+		while(@act() & \runnable@running())
+			do draw@rect(0.0, 0.0, 800.0, 600.0, 0xFF00FF00)
+			do draw@render(60)
+		end while
 		
-		do me.snd :: snd@makeSnd("res/amacha/sevillanotoride.ogg", false)
+		do me.tex :: (\runnable@getRunnable() $ Loader).tex_
+		do me.snd :: (\runnable@getRunnable() $ Loader).snd_
 	end func
 	
 	+*func unload()
@@ -213,26 +245,42 @@ class Scene3(@Scene)
 	+var snd: snd@Snd
 	+var isClicked: bool
 	
+	class Loader(\runnable@Runnable)
+		+var tex_: []draw@Tex
+		+var snd_: snd@Snd
+		+*func runnableTarget()
+			var FILENAME: [][]char :: [
+			|"camera_baby_mother.png",
+			|"hanami_engawa_couple.png",
+			|"kousaku_family_mother.png",
+			|"kouyou_engawa_couple.png",
+			|"medical_kaigo_tsuuin_kaijo_man.png",
+			|"restaurant_rich_family.png",
+			|"school_jugyousankan_parents.png",
+			|"shigosan_753_kids.png",
+			|"syokuji_couple_smile.png",
+			|"taxi_family.png"]
+			
+			do me.tex_ :: #[^FILENAME]draw@Tex
+			for i(0, ^FILENAME - 1)
+				do me.tex_[i] :: draw@makeTex(
+				|"res/irasutoya/scene3/" ~ FILENAME[i])
+			end for
+			
+			do me.snd_ :: snd@makeSnd("res/amacha/hotarumausora.ogg", false)
+		end func
+	end class
+	
 	+*func load()
-		var FILENAME: [][]char :: [
-		|"camera_baby_mother.png",
-		|"hanami_engawa_couple.png",
-		|"kousaku_family_mother.png",
-		|"kouyou_engawa_couple.png",
-		|"medical_kaigo_tsuuin_kaijo_man.png",
-		|"restaurant_rich_family.png",
-		|"school_jugyousankan_parents.png",
-		|"shigosan_753_kids.png",
-		|"syokuji_couple_smile.png",
-		|"taxi_family.png"]
+		do \runnable@runAsync(#Loader)
 		
-		do me.tex :: #[10]draw@Tex
-		for i(0, ^FILENAME - 1)
-			do me.tex[i] :: draw@makeTex(
-			|"res/irasutoya/scene3/" ~ FILENAME[i])
-		end for
+		while(@act() & \runnable@running())
+			do draw@rect(0.0, 0.0, 800.0, 600.0, 0xFFFF0000)
+			do draw@render(60)
+		end while
 		
-		do me.snd :: snd@makeSnd("res/amacha/hotarumausora.ogg", false)
+		do me.tex :: (\runnable@getRunnable() $ Loader).tex_
+		do me.snd :: (\runnable@getRunnable() $ Loader).snd_
 	end func
 	
 	+*func unload()

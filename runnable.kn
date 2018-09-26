@@ -1,0 +1,128 @@
+; Copyright 2018 Haruo Wakakusa
+;
+
+; [document]
+;
+; 1 \runnableモジュール
+;     非同期スレッドのヘルパーモジュールです。
+;     このモジュールではKuinのtask@Threadクラスを使用していますが、
+;     生成されるスレッドをメインスレッドから隔離するための
+;     イディオムを提供します。このことにより現行のKuin処理系においても
+;     安全に非同期処理を行うことができます。
+;
+;     このモジュールでは１度に１つだけスレッドを生成することができます。
+;     主にゲームアセットのローディング処理を行うことを想定しています。
+;
+;        表1-1: \runnableモジュール
+;   *      名前             |     説明
+;   * \runnable@runAsync    | 非同期処理を開始する関数
+;   * \runnable@running     | 非同期処理が実行中であるかを取得する関数
+;   * \runnable@getRunnable | 非同期処理クラスを取得する関数
+;   * \runnable@Runnable    | 非同期処理クラスの親クラス
+;
+; 2 \runnable@runAsync
+;     「\runnable@runAsync」は非同期処理を開始する関数です。
+;     この関数に非同期処理クラスのインスタンスを代入します。
+;
+;        表2-1: \runnable@runAsync関数の定義
+;     func runAsync(runnable: @Runnable)
+;       runnable : 非同期処理クラス(後述)
+;
+;     この関数には、非同期処理クラスのコンストラクタの値を直接渡して
+;     ください。非同期処理の実行中に呼び出し側のスレッドの引数として
+;     保持することは禁止です（但しそのディープコピーを渡す場合はOK）。
+;
+;       do \runnable@runAsync(#@FooAsyncClass) ; OK
+;
+;       var foo: @FooAsyncClass :: #@FooAsyncClass
+;       do \runnable@runAsync(foo) ; NG
+;
+;       var foo: @FooAsyncClass :: #@FooAsyncClass
+;       do \runnable@runAsync(##foo) ; OK
+;
+;     「\runnable@runAsync」が生成する例外は表2-2の通りです。
+;        表2-2: \runnable@runAsync関数の例外
+;          発生条件           |  ビルド  | 例外コード(16進数)
+;     非同期処理が実行中である| dbg, rls | 00000001
+;
+; 3 \runnable@running
+;     「\runnable@running」は非同期処理が実行中であるかを取得する関数です。
+;
+;        表3-1: \runnable@running関数の定義
+;     func running(): bool
+;       返り値: trueであれば実行中、falseであれば実行中でない
+;
+; 4 \runnable@getRunnable
+;     「\runnable@getRunnable」は非同期処理実行後の非同期処理クラスの
+;     インスタンスを取得します。
+;
+;     「\runnable@getRunnable」が生成する例外は表2-2の通りです。
+;        表2-2: \runnable@getRunnable関数の例外
+;          発生条件           |  ビルド  | 例外コード(16進数)
+;     非同期処理が実行中である| dbg, rls | 00000001
+;
+; 5 \runnable@Runnable
+;     「\runnable@Runnable」は非同期処理クラスを作成するための
+;     基底クラス(親クラス)です。非同期処理クラスはこのクラスを
+;     継承してください。定義は表5-1の通りです。
+;
+;       表5-1: \runnable@Runnableクラスの定義
+;     \runnable@Runnable.runnableTarget | 非同期処理で実行される関数
+;
+; 5.1 \runnable@Runnable.runnableTarget
+;     「\runnable@Runnable.runnableTarget」は非同期処理によって
+;     呼び出されるメソッドです。非同期処理クラスにおいては
+;     このメソッドをオーバーロードすることで任意の非同期処理を
+;     させることができます。
+;
+;        表5-1-1: \runnable@Runnable.runnableTargetメソッドの定義
+;     func runnableTarget()
+;
+
+
+{非推奨の組み込み関数}
++func[d0000.knd, _makeThread, _make_instance]makeThread(
+	|me2: task@Thread, threadFunc: func<()>): task@Thread
+end func
+
++class Runnable()
+	; Runnableクラスは任意の名前のメソッドを
+	; 実行できるように、わざと長い名前の関数を用意する
+	+func runnableTarget()
+	end func
+end class
+
+var runnable: @Runnable
+var thread: task@Thread
+
++func runAsync(runnable: @Runnable)
+	if(@running())
+		throw 1
+	end if
+	
+	do @runnable :: runnable
+	
+	func lambda()
+		do @runnable.runnableTarget()
+	end func
+	
+	do @thread :: @makeThread(lambda)
+	do @thread.run()
+end func
+
++func running(): bool
+	if(@thread =& null)
+		ret false
+	elif(@thread.running())
+		ret true
+	else
+		do @thread :: null
+	end if
+end func
+
++func getRunnable(): @Runnable
+	if(@running())
+		throw 1
+	end if
+	ret @runnable
+end func
