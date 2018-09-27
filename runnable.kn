@@ -102,6 +102,10 @@ var thread: task@Thread
 	
 	do @runnable :: runnable
 	
+	; runAsync関数の終了に伴う@runnableオブジェクトの
+	; 参照カウント減算を無くすために行う
+	do runnable :: null
+	
 	func lambda()
 		do @runnable.runnableTarget()
 	end func
